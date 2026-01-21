@@ -1,0 +1,25 @@
+BODY {
+  background-color: $color-bk;
+  color: $color-main;
+  min-height: 100dvh;
+
+  @media (max-width: $size-sm), (max-height: $size-sm) {
+    overflow-y: auto;
+  }
+
+}
+
+HTML {
+	height: 100%;
+	scroll-behavior: smooth;
+}
+
+.container {
+  min-height: auto;
+  overflow: hidden;
+}
+
+.content {
+  position: relative;
+}
+

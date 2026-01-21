@@ -1,0 +1,24 @@
+{
+  "name": "Q35 Portfolio",
+  "version": "1.0.0",
+  "homepage": "https://www.sharamoff.com/_q35/index.html",
+  "description": "Q35 Portfolio. Part of Ihar Sharamau personal website.",
+  "moduleType": "globals",
+  "author": "Ihar Sharamau",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^3.0.3",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^8.0.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rigger": "^0.5.8",
+    "gulp-sass": "^6.0.0",
+    "gulp-uglify": "^3.0.2",
+    "rimraf": "^6.0.1",
+    "sass": "1.78.0"
+  },
+  "dependencies": {
+    "gsap": "^3.13.0"
+  }
+}
