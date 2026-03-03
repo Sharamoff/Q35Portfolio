@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet" width="64" height="94" viewBox="0 0 64 94" style="width:100%;height:100%">
+  <defs>
+    <animate repeatCount="indefinite" dur="20s" begin="0s" xlink:href="#_R_G_L_2_G" fill="freeze" attributeName="opacity" from="0" to="0" keyTimes="0;0.0666667;0.3333333;0.4;1" values="0;1;1;0;0" keySplines="0.333 0 0.667 1;0.311 0 0.752 1;0.405 0 0.746 1;0 0 0 0" calcMode="spline"/>
+    <animate repeatCount="indefinite" dur="20s" begin="0s" xlink:href="#_R_G_L_2_G_M" fill="freeze" attributeName="opacity" from="1" to="0" keyTimes="0;0.4011111;0.4011111;1" values="1;1;0;0" keySplines="0 0 0 0;0 0 0 0;0 0 0 0" calcMode="spline"/>
+    <animate repeatCount="indefinite" dur="20s" begin="0s" xlink:href="#_R_G_L_1_G" fill="freeze" attributeName="opacity" from="0" to="0" keyTimes="0;0.0666667;0.3333333;0.4;1" values="0;1;1;0;0" keySplines="0.333 0 0.667 1;0.311 0 0.752 1;0.405 0 0.746 1;0 0 0 0" calcMode="spline"/>
+    <animateMotion repeatCount="indefinite" dur="20s" begin="0s" xlink:href="#_R_G_L_1_G" fill="freeze" keyTimes="0;0.2333333;0.2444444;0.25;1" path="M32 39 C32,39 32,39 32,39 C32,39 32,34.53 32,34.53 C32,34.53 32,39 32,39 C32,39 32,39 32,39 " keyPoints="0;0;0.5;1;1" keySplines="0.75 0 0.75 1;0.75 0 0.75 1;0.75 0 0.75 1;0 0 0 0" calcMode="spline"/>
+    <animateTransform repeatCount="indefinite" dur="20s" begin="0s" xlink:href="#_R_G_L_1_G" fill="freeze" attributeName="transform" from="1 1" to="1 1" type="scale" additive="sum" keyTimes="0;0.1;0.1111111;0.1166667;0.1277778;0.1333333;0.2333333;0.2444444;0.25;1" values="1 1;1 1;1 0.8;1 1;1 0.8;1 1;1 1;1 0.85;1 1;1 1" keySplines="0.25 0 0.25 1;0.25 0 0.25 1;0.25 0 0.25 1;0.25 0 0.25 1;0.25 0 0.25 1;0.25 0 0.75 1;0.75 0 0.75 1;0.75 0 0.75 1;0 0 0 0" calcMode="spline"/>
+    <animateTransform repeatCount="indefinite" dur="20s" begin="0s" xlink:href="#_R_G_L_1_G" fill="freeze" attributeName="transform" from="-32 -39" to="-32 -39" type="translate" additive="sum" keyTimes="0;1" values="-32 -39;-32 -39" keySplines="0 0 1 1" calcMode="spline"/>
+    <animate repeatCount="indefinite" dur="20s" begin="0s" xlink:href="#_R_G_L_1_G_M" fill="freeze" attributeName="opacity" from="1" to="0" keyTimes="0;0.4011111;0.4011111;1" values="1;1;0;0" keySplines="0 0 0 0;0 0 0 0;0 0 0 0" calcMode="spline"/>
+    <animate repeatCount="indefinite" dur="20s" begin="0s" xlink:href="#_R_G_L_0_G" fill="freeze" attributeName="opacity" from="0" to="0" keyTimes="0;0.0666667;0.3333333;0.4;1" values="0;1;1;0;0" keySplines="0.333 0 0.667 1;0.311 0 0.752 1;0.405 0 0.746 1;0 0 0 0" calcMode="spline"/>
+    <animateMotion repeatCount="indefinite" dur="20s" begin="0s" xlink:href="#_R_G_L_0_G" fill="freeze" keyTimes="0;0.1;0.1111111;0.1166667;0.1277778;0.1333333;0.2333333;0.2444444;0.25;1" path="M32 64 C32,64 32,64 32,64 C32,64 32,69 32,69 C32,69 32,64 32,64 C32,64 32,69 32,69 C32,69 32,64 32,64 C32,64 32,64 32,64 C32,64 32,59 32,59 C32,59 32,64 32,64 C32,64 32,64 32,64 " keyPoints="0;0;0.17;0.33;0.5;0.67;0.67;0.83;1;1" keySplines="0.25 0 0.25 1;0.25 0 0.25 1;0.25 0 0.25 1;0.25 0 0.25 1;0.25 0 0.25 1;0.167 0.167 0.25 0.25;0.167 0 0.25 1;0.167 0 0.25 1;0 0 0 0" calcMode="spline"/>
+    <animateTransform repeatCount="indefinite" dur="20s" begin="0s" xlink:href="#_R_G_L_0_G" fill="freeze" attributeName="transform" from="0" to="0" type="rotate" additive="sum" keyTimes="0;0.2277778;0.2333333;0.2555556;0.2611111;1" values="0;0;180;180;0;0" keySplines="0.5 0 0.5 1;0.5 0 0.5 1;0.5 0 0.5 1;0.5 0 0.5 1;0 0 0 0" calcMode="spline"/>
+    <animateTransform repeatCount="indefinite" dur="20s" begin="0s" xlink:href="#_R_G_L_0_G" fill="freeze" attributeName="transform" from="-32 -64" to="-32 -64" type="translate" additive="sum" keyTimes="0;1" values="-32 -64;-32 -64" keySplines="0 0 1 1" calcMode="spline"/>
+    <animate repeatCount="indefinite" dur="20s" begin="0s" xlink:href="#_R_G_L_0_G_M" fill="freeze" attributeName="opacity" from="1" to="0" keyTimes="0;0.4011111;0.4011111;1" values="1;1;0;0" keySplines="0 0 0 0;0 0 0 0;0 0 0 0" calcMode="spline"/>
+    <animate attributeType="XML" attributeName="opacity" from="0" to="1" xlink:href="#time_group"/>
+  </defs>
+
+  <g id="_R_G">
+    <g id="_R_G_L_2_G_M">
+      <g id="_R_G_L_2_G">
+        <path fill="none" d=" M40 3.1 C40,3.1 40,35 40,35 C40,39.01 36,43 32,43 C28,43 24,39.01 24,35 C24,35 24,3.1 24,3.1  M32 92 C15.43,92 2,78.25 2,61.29 C2,61.29 2,32.71 2,32.71 C2,15.75 15.43,2 32,2 C48.57,2 62,15.75 62,32.71 C62,32.71 62,61.29 62,61.29 C62,78.25 48.57,92 32,92z "/>
+        <path stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke-width="4" d=" M40 3.1 C40,3.1 40,35 40,35 C40,39.01 36,43 32,43 C28,43 24,39.01 24,35 C24,35 24,3.1 24,3.1  M32 92 C15.43,92 2,78.25 2,61.29 C2,61.29 2,32.71 2,32.71 C2,15.75 15.43,2 32,2 C48.57,2 62,15.75 62,32.71 C62,32.71 62,61.29 62,61.29 C62,78.25 48.57,92 32,92z "/>
+      </g>
+    </g>
+
+    <g id="_R_G_L_1_G_M">
+      <g id="_R_G_L_1_G">
+        <path fill="#ffffff" d=" M32 9 C32,9 32,9 32,9 C34.21,9 36,10.79 36,13 C36,13 36,35 36,35 C36,37.21 34.21,39 32,39 C29.79,39 28,37.21 28,35 C28,35 28,13 28,13 C28,10.79 29.79,9 32,9z "/>
+      </g>
+    </g>
+
+    <g id="_R_G_L_0_G_M">
+      <g id="_R_G_L_0_G">
+        <path stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke-width="2" d=" M32 54 C32,54 32,74 32,74  M32 74 C32,74 35,70 35,70  M32 74 C32,74 29,70 29,70 "/>
+      </g>
+    </g>
+  </g>
+
+  <g id="time_group"/>
+</svg>
