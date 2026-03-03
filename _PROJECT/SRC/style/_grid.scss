@@ -23,14 +23,23 @@ body {
 
 .canvas-wrapper {
   width: 100%;
-  max-width: 860px;
+  max-width: 880px;
   aspect-ratio: 1/1;
   opacity: 0;
-  padding: 30px;
-  background: rgba(255,255,255,0.2);
+  padding: 40px;
+  background: rgba(255,255,255,0.15);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(5px);
-  border-radius: 10px;
+
+  @media (max-height: $size-sm) {
+    height: 90dvh;
+    width: auto;
+  }
+
+  @media (max-width: $size-sm), (max-height: $size-sm) {
+    padding: 15px;
+  }
+
 }
 
 canvas {
@@ -83,6 +92,11 @@ canvas {
   align-items: center;
   pointer-events: none;
   opacity: 0;
+
+  @media (max-width: $size-sm), (max-height: $size-sm) {
+    display: none;
+  }
+
 }
 
 .scroll-indicator img {
