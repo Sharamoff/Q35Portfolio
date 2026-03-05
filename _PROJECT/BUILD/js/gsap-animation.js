@@ -13,6 +13,8 @@ const frameBuffer=30;
 
 let currentFrame=1;
 
+const frameProxy={frame:1};
+
 const textures=new Array(totalFrames+1);
 const loaded=new Array(totalFrames+1).fill(false);
 
@@ -171,6 +173,7 @@ async function preloadInitialFrames(){
 function startExperience(){
 	resizeCanvas();
 	currentFrame=1;
+	frameProxy.frame=1;
 	render();
 	gsap.to(loader,{opacity:0,duration:0.6,onComplete:()=>loader.style.display="none"});
 	gsap.to(canvasWrapper,{opacity:1,duration:0.8,delay:0.2});
@@ -181,7 +184,8 @@ function startExperience(){
 
 
 function render(){
-	const tex=textures[currentFrame];
+	const frame=Math.round(frameProxy.frame);
+	const tex=textures[frame];
 	if(!tex) return;
 	gl.clearColor(0,0,0,1);
 	gl.clear(gl.COLOR_BUFFER_BIT);
@@ -199,12 +203,9 @@ function initScroll(){
 		scrub:true,
 		onUpdate:(self)=>{
 			const progress=self.progress;
-			const frame=Math.floor(progress*(totalFrames-1))+1;
-			if(frame!==currentFrame){
-				currentFrame=frame;
-				ensureFrames(frame);
-				render();
-			}
+			const targetFrame=progress*(totalFrames-1)+1;
+			gsap.to(frameProxy,{frame:targetFrame,duration:0.35,ease:"power3.out",onUpdate:render});
+			ensureFrames(Math.round(targetFrame));
 		}
 	});
 }
