@@ -6,17 +6,20 @@ $size-xl:             1200px;
 $size-xxl:            1400px;
 
 $c-white:             #FFFFFF;
-$c-gray:              #3C3F42;
-$c-gray-light:        #8E9194;
-$c-gray-lighter:      #E9EAEB;
-$c-red:               #AE194A;
+$c-gray:              #2A2B2F;
+$c-gray-light:        #BBBBBB;
 
-$color-bk:            $c-white;
+$c-blue:              #4D96CA;
+$c-red:               #B44363;
+$c-green:             #699227;
+
+
+$color-bk:            $c-gray-light;
 $color-main:          $c-gray;
 
 $font-family:         'Nunito', Arial, Helvetica, sans-serif;
 $font-family-big:     'League Gothic', 'Arial Narrow', Helvetica, sans-serif;
-$font-size-base:      18px;
-$font-size-base-md:   16px;
+$font-size-base:      21px;
+$font-size-base-md:   15px;
 
 

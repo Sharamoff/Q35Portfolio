@@ -1,5 +1,7 @@
 gsap.registerPlugin(ScrollTrigger);
 
+ScrollTrigger.normalizeScroll(true);
+
 const canvas=document.getElementById("glcanvas");
 const loader=document.getElementById("loader");
 const loaderProgress=document.getElementById("loaderProgress");
@@ -9,7 +11,8 @@ const gl=canvas.getContext("webgl",{antialias:true,alpha:false,powerPreference:"
 
 const totalFrames=450;
 const initialLoadFrames=60;
-const frameBuffer=30;
+
+const frameBuffer=window.innerWidth<768?80:40;
 
 let currentFrame=1;
 
@@ -27,7 +30,7 @@ intro.eventCallback("onComplete",initHeroScroll);
 
 function initHeroScroll(){
 	gsap.set(".hero-title",{y:0,opacity:1});
-	gsap.set(".text-block",{opacity:0,y:120});
+	gsap.set(".text-block",{opacity:0,y:300});
 	const heroTL=gsap.timeline({
 		scrollTrigger:{
 			trigger:".hero-screen",
@@ -39,9 +42,10 @@ function initHeroScroll(){
 		}
 	});
 	heroTL.to(".hero-title",{y:-300,opacity:0,ease:"none"});
-	heroTL.to(".overview",{opacity:1,y:0,ease:"none"});
-	heroTL.to(".challenge",{opacity:1,y:0,ease:"none"});
-	heroTL.to(".solution",{opacity:1,y:0,ease:"none"});
+	heroTL.to(".block--overview",{opacity:1,y:0,ease:"none"});
+	heroTL.to(".block--challenge",{opacity:1,y:0,ease:"none"});
+	heroTL.to(".block--solution",{opacity:1,y:0,ease:"none"});
+	heroTL.to(".block--tools",{opacity:1,y:0,ease:"none"});
 	heroTL.to({}, {duration:1});
 	heroTL.to(".hero-text",{y:-300,opacity:0,ease:"none"});
 	heroTL.to(".stage",{opacity:1,ease:"none"});
@@ -50,7 +54,7 @@ function initHeroScroll(){
 
 
 ScrollTrigger.create({
-	trigger:".stage-section",
+	trigger:".stage-screen",
 	start:"top top",
 	once:true,
 	onEnter:()=>{
@@ -149,11 +153,25 @@ function loadTexture(index){
 
 
 function ensureFrames(targetFrame){
-	const start=Math.max(1,targetFrame-frameBuffer);
-	const end=Math.min(totalFrames,targetFrame+frameBuffer);
+	const start=Math.max(1,Math.floor(targetFrame-frameBuffer*0.4));
+	const end=Math.min(totalFrames,Math.floor(targetFrame+frameBuffer*1.6));
 	for(let i=start;i<=end;i++){
 		if(!loaded[i]) loadTexture(i);
 	}
+}
+
+
+
+function preloadAllFrames(){
+	let i=initialLoadFrames+1;
+	function loadNext(){
+		if(i>totalFrames) return;
+		loadTexture(i).then(()=>{
+			i++;
+			requestIdleCallback(loadNext);
+		});
+	}
+	requestIdleCallback(loadNext);
 }
 
 
@@ -177,14 +195,15 @@ function startExperience(){
 	render();
 	gsap.to(loader,{opacity:0,duration:0.6,onComplete:()=>loader.style.display="none"});
 	gsap.to(canvasWrapper,{opacity:1,duration:0.8,delay:0.2});
-	gsap.to(".scroll-indicator",{opacity:0.33,delay:0.5});
 	initScroll();
+	preloadAllFrames();
 }
 
 
 
 function render(){
-	const frame=Math.round(frameProxy.frame);
+	let frame=Math.round(frameProxy.frame);
+	while(frame>1 && !textures[frame]) frame--;
 	const tex=textures[frame];
 	if(!tex) return;
 	gl.clearColor(0,0,0,1);
@@ -195,16 +214,33 @@ function render(){
 
 
 
+let scrollTween=null;
+
 function initScroll(){
 	ScrollTrigger.create({
-		trigger:".stage-section",
+		trigger:".stage-screen",
 		start:"top top",
 		end:"bottom bottom",
 		scrub:true,
 		onUpdate:(self)=>{
 			const progress=self.progress;
-			const targetFrame=progress*(totalFrames-1)+1;
-			gsap.to(frameProxy,{frame:targetFrame,duration:0.35,ease:"power3.out",onUpdate:render});
+			let targetFrame=progress*(totalFrames-1)+1;
+
+			const maxStep=12;
+
+			if(Math.abs(targetFrame-frameProxy.frame)>maxStep){
+				targetFrame=frameProxy.frame+(targetFrame>frameProxy.frame?maxStep:-maxStep);
+			}
+
+			if(scrollTween) scrollTween.kill();
+
+			scrollTween=gsap.to(frameProxy,{
+				frame:targetFrame,
+				duration:0.35,
+				ease:"power3.out",
+				onUpdate:render
+			});
+
 			ensureFrames(Math.round(targetFrame));
 		}
 	});
