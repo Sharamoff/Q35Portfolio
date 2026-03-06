@@ -2,36 +2,31 @@ gsap.registerPlugin(ScrollTrigger);
 
 ScrollTrigger.normalizeScroll(true);
 
-const canvas=document.getElementById("glcanvas");
-const loader=document.getElementById("loader");
-const loaderProgress=document.getElementById("loaderProgress");
-const canvasWrapper=document.querySelector(".canvas-wrapper");
+const fps = 30;
+const totalFrames = 450;
 
-const gl=canvas.getContext("webgl",{antialias:true,alpha:false,powerPreference:"high-performance"});
+const video = document.getElementById("q35video");
 
-const totalFrames=450;
-const initialLoadFrames=60;
+video.pause();
+video.currentTime = 0;
 
-const frameBuffer=window.innerWidth<768?80:40;
-
-let currentFrame=1;
-
-const frameProxy={frame:1};
-
-const textures=new Array(totalFrames+1);
-const loaded=new Array(totalFrames+1).fill(false);
+video.addEventListener("loadeddata",()=>{
+	video.currentTime = 0.001;
+});
 
 
 
-const intro=gsap.from(".hero-title",{y:"120vh",duration:1.6,ease:"power3.out"});
+const intro = gsap.from(".hero-title",{y:"120vh",duration:1.6,ease:"power3.out"});
 intro.eventCallback("onComplete",initHeroScroll);
 
 
 
 function initHeroScroll(){
+
 	gsap.set(".hero-title",{y:0,opacity:1});
 	gsap.set(".text-block",{opacity:0,y:300});
-	const heroTL=gsap.timeline({
+
+	const heroTL = gsap.timeline({
 		scrollTrigger:{
 			trigger:".hero-screen",
 			start:"top top",
@@ -41,6 +36,7 @@ function initHeroScroll(){
 			anticipatePin:1
 		}
 	});
+
 	heroTL.to(".hero-title",{y:-300,opacity:0,ease:"none"});
 	heroTL.to(".block--overview",{opacity:1,y:0,ease:"none"});
 	heroTL.to(".block--challenge",{opacity:1,y:0,ease:"none"});
@@ -49,6 +45,7 @@ function initHeroScroll(){
 	heroTL.to({}, {duration:1});
 	heroTL.to(".hero-text",{y:-300,opacity:0,ease:"none"});
 	heroTL.to(".stage",{opacity:1,ease:"none"});
+
 }
 
 
@@ -59,195 +56,46 @@ ScrollTrigger.create({
 	once:true,
 	onEnter:()=>{
 		document.querySelector(".stage").style.pointerEvents="auto";
-		startExperience();
+		initVideoScroll();
 	}
 });
 
 
 
-function resizeCanvas(){
-	const rect=canvas.getBoundingClientRect();
-	const dpr=window.devicePixelRatio||1;
-	canvas.width=Math.round(rect.width*dpr);
-	canvas.height=Math.round(rect.height*dpr);
-	gl.viewport(0,0,canvas.width,canvas.height);
-	render();
-}
+function initVideoScroll(){
 
-window.addEventListener("resize",resizeCanvas);
+	function start(){
 
+		const frameProxy = {frame:0};
 
+		ScrollTrigger.create({
+			trigger:".stage-screen",
+			start:"top top",
+			end:"bottom bottom",
+			scrub:true,
+			onUpdate:(self)=>{
 
-const vertexShaderSource=`
-attribute vec2 position;
-varying vec2 uv;
-void main(){
-uv=position*0.5+0.5;
-gl_Position=vec4(position,0,1);
-}
-`;
+				const targetFrame = Math.floor(self.progress * (totalFrames-1));
 
-const fragmentShaderSource=`
-precision mediump float;
-uniform sampler2D tex;
-varying vec2 uv;
-void main(){
-gl_FragColor=texture2D(tex,uv);
-}
-`;
+				gsap.to(frameProxy,{
+					frame:targetFrame,
+					duration:0.08,
+					ease:"power1.out",
+					overwrite:true,
+					onUpdate:()=>{
+						video.currentTime = frameProxy.frame / fps;
+					}
+				});
 
-
-
-function createShader(type,source){
-	const shader=gl.createShader(type);
-	gl.shaderSource(shader,source);
-	gl.compileShader(shader);
-	return shader;
-}
-
-
-
-const program=gl.createProgram();
-gl.attachShader(program,createShader(gl.VERTEX_SHADER,vertexShaderSource));
-gl.attachShader(program,createShader(gl.FRAGMENT_SHADER,fragmentShaderSource));
-gl.linkProgram(program);
-gl.useProgram(program);
-
-
-
-const vertices=new Float32Array([-1,-1,1,-1,-1,1,1,1]);
-
-const buffer=gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
-gl.bufferData(gl.ARRAY_BUFFER,vertices,gl.STATIC_DRAW);
-
-
-
-const position=gl.getAttribLocation(program,"position");
-gl.enableVertexAttribArray(position);
-gl.vertexAttribPointer(position,2,gl.FLOAT,false,0,0);
-
-gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
-
-
-
-function loadTexture(index){
-	return new Promise(resolve=>{
-		const img=new Image();
-		img.src=`animation/${String(index).padStart(4,"0")}.webp`;
-		img.onload=()=>{
-			const tex=gl.createTexture();
-			gl.bindTexture(gl.TEXTURE_2D,tex);
-			gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
-			gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
-			gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
-			gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
-			gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);
-			textures[index]=tex;
-			loaded[index]=true;
-			resolve();
-		};
-	});
-}
-
-
-
-function ensureFrames(targetFrame){
-	const start=Math.max(1,Math.floor(targetFrame-frameBuffer*0.4));
-	const end=Math.min(totalFrames,Math.floor(targetFrame+frameBuffer*1.6));
-	for(let i=start;i<=end;i++){
-		if(!loaded[i]) loadTexture(i);
-	}
-}
-
-
-
-function preloadAllFrames(){
-	let i=initialLoadFrames+1;
-	function loadNext(){
-		if(i>totalFrames) return;
-		loadTexture(i).then(()=>{
-			i++;
-			requestIdleCallback(loadNext);
-		});
-	}
-	requestIdleCallback(loadNext);
-}
-
-
-
-async function preloadInitialFrames(){
-	let loadedCount=0;
-	for(let i=1;i<=initialLoadFrames;i++){
-		await loadTexture(i);
-		loadedCount++;
-		const progress=loadedCount/initialLoadFrames;
-		loaderProgress.style.strokeDashoffset=283*(1-progress);
-	}
-}
-
-
-
-function startExperience(){
-	resizeCanvas();
-	currentFrame=1;
-	frameProxy.frame=1;
-	render();
-	gsap.to(loader,{opacity:0,duration:0.6,onComplete:()=>loader.style.display="none"});
-	gsap.to(canvasWrapper,{opacity:1,duration:0.8,delay:0.2});
-	initScroll();
-	preloadAllFrames();
-}
-
-
-
-function render(){
-	let frame=Math.round(frameProxy.frame);
-	while(frame>1 && !textures[frame]) frame--;
-	const tex=textures[frame];
-	if(!tex) return;
-	gl.clearColor(0,0,0,1);
-	gl.clear(gl.COLOR_BUFFER_BIT);
-	gl.bindTexture(gl.TEXTURE_2D,tex);
-	gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
-}
-
-
-
-let scrollTween=null;
-
-function initScroll(){
-	ScrollTrigger.create({
-		trigger:".stage-screen",
-		start:"top top",
-		end:"bottom bottom",
-		scrub:true,
-		onUpdate:(self)=>{
-			const progress=self.progress;
-			let targetFrame=progress*(totalFrames-1)+1;
-
-			const maxStep=12;
-
-			if(Math.abs(targetFrame-frameProxy.frame)>maxStep){
-				targetFrame=frameProxy.frame+(targetFrame>frameProxy.frame?maxStep:-maxStep);
 			}
+		});
 
-			if(scrollTween) scrollTween.kill();
+	}
 
-			scrollTween=gsap.to(frameProxy,{
-				frame:targetFrame,
-				duration:0.35,
-				ease:"power3.out",
-				onUpdate:render
-			});
+	if(video.readyState >= 1){
+		start();
+	}else{
+		video.addEventListener("loadedmetadata",start);
+	}
 
-			ensureFrames(Math.round(targetFrame));
-		}
-	});
 }
-
-
-
-window.addEventListener("load",()=>{
-	preloadInitialFrames();
-});

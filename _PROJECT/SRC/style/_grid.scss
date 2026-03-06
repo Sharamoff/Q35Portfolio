@@ -184,7 +184,32 @@ canvas {
 
 
 
+.video-wrapper {
+  width: 100%;
+  max-width: 880px;
+  aspect-ratio: 1/1;
+  padding: 40px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 
+  @media (max-width: $size-sm), (max-height: $size-sm) {
+    padding: 15px;
+  }
+
+  @media (max-height: $size-sm) {
+    height: 100%;
+    width: auto;
+  }
+
+}
+
+#q35video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
 
 
 
