@@ -138,8 +138,6 @@ body {
 
 
 
-
-
 .stage-screen {
   height: calc(450 * 30px + 100vh);
 }
@@ -150,38 +148,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url("../img/bkq35.webp") center / cover no-repeat;
+  background: #cccccc;
+  //background: url("../img/bkq35.webp") center / cover no-repeat;
   opacity: 0;
   pointer-events: none;
 }
-
-.canvas-wrapper {
-  width: 100%;
-  max-width: 880px;
-  aspect-ratio: 1/1;
-  opacity: 0;
-  padding: 40px;
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-
-  @media (max-width: $size-sm), (max-height: $size-sm) {
-    padding: 15px;
-  }
-
-  @media (max-height: $size-sm) {
-    height: 100%;
-    width: auto;
-  }
-
-}
-
-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
 
 
 .video-wrapper {
@@ -213,51 +184,10 @@ canvas {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-.loader {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-}
-
-.loader__svg {
-  width: 200px;
-  height: 200px;
-  transform: rotate(-90deg);
-}
-
-.loader__bg {
-  fill: none;
-  stroke: rgba(255,255,255,0.15);
-  stroke-width: 6;
-}
-
-.loader__progress {
-  fill: none;
-  stroke: #ffffff;
-  stroke-width: 6;
-  stroke-linecap: round;
-  stroke-dasharray: 283;
-  stroke-dashoffset: 283;
-  opacity: .33;
-  transition: stroke-dashoffset .15s linear;
-}
-
 .scroll-indicator {
   position: fixed;
   left: 50%;
-  bottom: 30px;
+  bottom: 1dvh;
   transform: translateX(-50%);
   width: 80px;
   height: 54px;
@@ -265,11 +195,12 @@ canvas {
   z-index: 9999;
   opacity: .33;
 
-  @media (max-width: $size-sm), (max-height: $size-sm) {
-    display: none;
+  @media (max-width: $size-sm) {
+    width: 60px;
+    height: 40px;
   }
 
-  @media (pointer: coarse) and (hover: none) {
+  @media (max-height: $size-sm) {
     display: none;
   }
 
