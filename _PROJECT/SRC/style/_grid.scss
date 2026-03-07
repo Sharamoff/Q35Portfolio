@@ -10,6 +10,7 @@ html,body {
 
 body {
   overflow-x: hidden;
+  background: #bbbbbb
 }
 
 .hero-screen {
@@ -18,7 +19,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  background: url("../img/bkq35.webp") center / cover no-repeat;
+  background: #bbbbbb url("../img/bkq35-1.webp") top / cover no-repeat;
   overflow: hidden;
 }
 
@@ -148,8 +149,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #cccccc;
-  //background: url("../img/bkq35.webp") center / cover no-repeat;
+  background: #bbbbbb url("../img/bkq35-2.webp") top / cover no-repeat;
   opacity: 0;
   pointer-events: none;
 }
