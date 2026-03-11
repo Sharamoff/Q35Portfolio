@@ -40,7 +40,8 @@ function initHeroScene(){
 			start:"top top",
 			end:"+=500%",
 			scrub:isMobile?true:0.6,
-			pin:true
+			pin:true,
+			invalidateOnRefresh:true
 		}
 	});
 
@@ -49,7 +50,7 @@ function initHeroScene(){
 	heroTL.to(".block--challenge",{opacity:1,y:0});
 	heroTL.to(".block--solution",{opacity:1,y:0});
 	heroTL.to(".block--tools",{opacity:1,y:0});
-	heroTL.to({}, {duration:0.5});
+	heroTL.to({}, {duration:0.25});
 	heroTL.to(".stage",{opacity:1});
 
 	initStageScene();
@@ -80,9 +81,10 @@ function initStageScene(){
 		scrollTrigger:{
 			trigger:".stage-screen",
 			start:"top top",
-			end:"+=700%",
+			end:"+=600%",
 			scrub:true,
-			pin:true
+			pin:true,
+			invalidateOnRefresh:true
 		}
 	});
 
@@ -96,7 +98,7 @@ function initStageScene(){
 		}
 	});
 
-	stageTL.to({}, {duration:0.5});
+	stageTL.to({}, {duration:0.25});
 
 	stageTL.to(".gallery-screen",{opacity:1});
 
@@ -114,7 +116,8 @@ function initGalleryScene(){
 			start:"top top",
 			end:"+=300%",
 			scrub:isMobile?true:0.6,
-			pin:true
+			pin:true,
+			invalidateOnRefresh:true
 		}
 	});
 
