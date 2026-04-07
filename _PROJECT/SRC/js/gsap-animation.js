@@ -6,7 +6,8 @@ ScrollTrigger.config({ignoreMobileResize:true});
 const fps=30;
 const totalFrames=450;
 const video=document.getElementById("q35video");
-const isMobile=window.matchMedia("(pointer:coarse)").matches;
+const mobileQuery=window.matchMedia("(max-width:576px)");
+const isMobile=mobileQuery.matches;
 
 video.pause();
 video.currentTime=0;
@@ -17,7 +18,8 @@ video.playsInline=true;
 gsap.set(".stage",{opacity:0});
 gsap.set(".text-block",{opacity:0,y:200});
 gsap.set(".gallery-title",{x:800,opacity:0});
-gsap.set(".gr__item",{opacity:0,xPercent:-50,yPercent:-50});
+gsap.set(".gallery-renders",{y:100,opacity:0});
+gsap.set(".gr__item",{opacity:0});
 
 function preloadImages(selector){
 	const images=document.querySelectorAll(selector);
@@ -94,18 +96,14 @@ function initStageScene(){
 			targetFrame=p*(totalFrames-1);
 		}
 	});
-	stageTL.to({}, {duration:0.25});
-	stageTL.to(".stage",{opacity:0,duration:0.6});
+	stageTL.to({}, {duration:0.2});
+	stageTL.to(".stage",{opacity:0,duration:0.4}, "<");
 	preloadImages(".gallery-renders img").then(()=>{
 		initGalleryScene();
 	});
 }
 
 function initGalleryScene(){
-	if(isMobile){
-		gsap.set(".gr__item",{clearProps:"transform,opacity",position:"relative",opacity:1});
-		return;
-	}
 	const items=gsap.utils.toArray(".gr__item");
 	const steps=items.length+2;
 
@@ -127,7 +125,7 @@ function initGalleryScene(){
 
 	tl.to(".gallery-title",{x:0,opacity:1});
 	tl.to(".gallery-title",{y:-100,opacity:0},"+=0.5");
-	tl.to(".gallery-renders",{opacity:1,y:0,duration:0.3});
+	tl.to(".gallery-renders",{opacity:1,y:0,duration:0.3}, "<");
 
 	items.forEach((item,i)=>{
 		const prev=items[i-1];
@@ -158,15 +156,11 @@ function initGalleryScene(){
 
 		if(prev){
 			tl.to(prev,{
-				y:-120,
 				opacity:0,
-				scale:depthScaleOut,
 				zIndex:zOut,
-				ease:"power2.in",
-				duration:0.5
 			},"<");
 		}
 
-		tl.to({}, {duration:0.3});
+		tl.to({}, {duration:0.5});
 	});
 }
