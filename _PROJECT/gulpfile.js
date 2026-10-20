@@ -56,7 +56,7 @@ gulp.task('html:build', () => {
 gulp.task('js:build', () => {
 	return gulp.src(path.src.js)
 		.pipe(rigger())
-		//.pipe(uglify())
+		.pipe(uglify())
 		.pipe(gulp.dest(path.build.js))
 		.pipe(browserSync.stream())
 });
