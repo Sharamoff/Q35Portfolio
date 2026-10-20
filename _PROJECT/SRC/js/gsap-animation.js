@@ -6,7 +6,7 @@ ScrollTrigger.config({ignoreMobileResize:true});
 const fps=30;
 const totalFrames=450;
 const video=document.getElementById("q35video");
-const mobileQuery=window.matchMedia("(max-width:576px)");
+const mobileQuery=window.matchMedia("(max-width: 576px), (max-height: 576px)");
 const isMobile=mobileQuery.matches;
 
 video.pause();
@@ -17,25 +17,8 @@ video.playsInline=true;
 
 gsap.set(".stage",{opacity:0});
 gsap.set(".text-block",{opacity:0,y:200});
-gsap.set(".gallery-title",{x:800,opacity:0});
-gsap.set(".gallery-renders",{y:100,opacity:0});
-gsap.set(".gr__item",{opacity:0});
-
-function preloadImages(selector){
-	const images=document.querySelectorAll(selector);
-	const promises=[];
-	images.forEach(img=>{
-		const src=img.getAttribute("src");
-		const image=new Image();
-		const p=new Promise(res=>{
-			image.onload=res;
-			image.onerror=res;
-		});
-		image.src=src;
-		promises.push(p);
-	});
-	return Promise.all(promises);
-}
+gsap.set(".gallery-title",{top:"50%",x:0,xPercent:100,yPercent:-50,opacity:0});
+gsap.set(".gallery-splide",{y:160,opacity:0});
 
 const intro=gsap.from(".hero-title",{y:"120vh",duration:1.5,ease:"power3.inOut"});
 intro.eventCallback("onComplete",initHeroScene);
@@ -98,69 +81,34 @@ function initStageScene(){
 	});
 	stageTL.to({}, {duration:0.2});
 	stageTL.to(".stage",{opacity:0,duration:0.4}, "<");
-	preloadImages(".gallery-renders img").then(()=>{
-		initGalleryScene();
-	});
+	initGalleryScene();
 }
 
 function initGalleryScene(){
-	const items=gsap.utils.toArray(".gr__item");
-	const steps=items.length+2;
+	const createGalleryTimeline=(titleTop,scrub)=>{
+		gsap.set(".gallery-title",{top:"50%",x:0,xPercent:100,yPercent:0,opacity:0});
+		gsap.set(".gallery-splide",{y:160,opacity:0});
 
-	const tl=gsap.timeline({
-		scrollTrigger:{
-			trigger:".gallery-screen",
-			start:"top top",
-			end:() => "+=" + items.length*120 + "%",
-			scrub:1.2,
-			pin:true,
-			invalidateOnRefresh:true,
-			snap:{
-				snapTo:1/steps,
-				duration:{min:0.2,max:0.4},
-				ease:"power2.out"
+		const galleryTL=gsap.timeline({
+			scrollTrigger:{
+				trigger:".gallery-screen",
+				start:"top top",
+				end:"+=180%",
+				scrub,
+				pin:true,
+				invalidateOnRefresh:true
 			}
-		}
-	});
-
-	tl.to(".gallery-title",{x:0,opacity:1});
-	tl.to(".gallery-title",{y:-100,opacity:0},"+=0.5");
-	tl.to(".gallery-renders",{opacity:1,y:0,duration:0.3}, "<");
-
-	items.forEach((item,i)=>{
-		const prev=items[i-1];
-		const vw=window.innerWidth;
-		const side=i%2===0?-1:1;
-		const baseOffset=vw*0.22;
-		const randomJitter=gsap.utils.random(-vw*0.08,vw*0.08);
-		const startX=side*(baseOffset+randomJitter);
-		const depthScaleIn=gsap.utils.random(0.95,0.98);
-		const depthScaleOut=1;
-		const zIn=10+i;
-		const zOut=1;
-
-		tl.fromTo(item,{
-			y:140,
-			x:startX,
-			opacity:0,
-			scale:depthScaleIn,
-			zIndex:zIn
-		},{
-			y:0,
-			x:0,
-			opacity:1,
-			scale:1,
-			ease:"expo.out",
-			duration:0.5
 		});
 
-		if(prev){
-			tl.to(prev,{
-				opacity:0,
-				zIndex:zOut,
-			},"<");
-		}
+		galleryTL.to(".gallery-title",{x:0,xPercent:-50,opacity:1,duration:0.45,ease:"power2.out"});
+		galleryTL.to(".gallery-title",{top:titleTop,yPercent:40,duration:0.35,ease:"power2.inOut"});
+		galleryTL.to(".gallery-splide",{y:0,opacity:1,duration:0.55,ease:"power3.out"});
 
-		tl.to({}, {duration:0.5});
+		return () => galleryTL.kill();
+	};
+
+	ScrollTrigger.matchMedia({
+		"(max-width: 576px), (max-height: 576px)":()=>createGalleryTimeline("40px",true),
+		"(min-width: 577px) and (min-height: 577px)":()=>createGalleryTimeline("100px",0.7)
 	});
 }

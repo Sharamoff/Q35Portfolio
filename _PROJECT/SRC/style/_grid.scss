@@ -15,13 +15,13 @@ body {
 
 section {
   position: relative;
-  height: 100dvh;
-  min-height: 100dvh;
+  height: 100svh;
+  min-height: 100svh;
   overflow: hidden;
   border-bottom: solid 5px rgba(255,255,255,0.33);
   background-color: #bbbbbb;
 
-  @media (max-width: $size-sm) {
+  @media (max-width: $size-sm), (max-height: $size-sm) {
     border-bottom: solid 2px rgba(128,128,128,0.33);
   }
 
@@ -64,9 +64,15 @@ section {
   width: 100%;
   max-width: 960px;
 
-  @media (max-width: $size-md), (max-height: $size-md) {
+  @media (max-width: $size-sm) {
     top: 15px;
     padding: 0 15px;
+    max-width: none;
+  }
+
+  @media (max-height: $size-md) {
+    top: 0;
+    padding: 20px;
     max-width: none;
   }
 
@@ -83,10 +89,14 @@ section {
   opacity: 0;
   letter-spacing: -0.03rem;
 
-  @media (max-width: $size-md), (max-height: $size-md) {
+  @media (max-width: $size-sm), (max-height: $size-sm) {
     font-size: $font-size-base-md;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     line-height: 1.1;
+  }
+
+  @media (max-height: $size-md), (max-height: $size-sm) {
+    margin-bottom: 15px;
   }
 
   p {
@@ -101,7 +111,7 @@ section {
     text-transform: uppercase;
     letter-spacing: normal;
 
-    @media (max-width: $size-md), (max-height: $size-md) {
+    @media (max-width: $size-sm), (max-height: $size-sm) {
       font-size: 24px;
     }
 
@@ -154,20 +164,21 @@ section {
   pointer-events: none;
   width: 100%;
   height: auto;
-  max-width: 880px;
+  max-width: 840px;
   aspect-ratio: 1/1;
-  padding: 40px;
+  padding: 20px;
   background: rgba(255,255,255,0.15);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
 
   @media (max-width: $size-md) {
     padding: 15px;
+    max-width: 700px;
   }
 
   @media (max-height: $size-md) {
     padding: 15px;
-    max-width: 630px;
+    max-width: 700px;
   }
 
   @media (max-height: $size-sm) {
@@ -186,84 +197,169 @@ section {
 
 
 
+
+
 .gallery-screen {
   background: url("../img/bkq35-3.webp") center top / cover no-repeat;
   overflow: hidden;
-}
-
-.gallery-title {
-  position: absolute;
-  top: 10%;
-  left: 10%;
-  width: 906px;
-  transform: translateX(90%);
-  z-index: 2;
-  will-change: transform,opacity;
-
-  @media (max-width: $size-md) {
-    width: 85%;
-  }
-
-  @media (max-height: $size-sm)  {
-    top: 1%;
-    width: 50%;
-  }
-
-}
-
-.gallery-renders {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  padding: 20px;
 
-  .gr__item {
+  .gallery-title {
     position: absolute;
-     z-index: 3;
-    width: 100%;
-    max-width: 880px;
-    padding: 40px;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    opacity: 0;
-    will-change: transform, opacity;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    width: min(800px, 85vw);
+    height: auto;
     pointer-events: none;
-    box-sizing: border-box;
+    transform: none;
+    will-change: transform, opacity;
+  }
 
-    @media (max-width: $size-md) {
-      transform: none;
-      top: auto;
-      left: 0;
-      padding: 15px;
-    }
-
-    @media (max-height: $size-md) {
-      padding: 15px;
-      max-width: 630px;
-    }
-
-    @media (max-height: $size-sm) {
-      height: 100%;
-      width: auto;
-    }
-
-    img {
-      width: 100%;
-      max-width: 800px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-    }
-
+  .gallery-splide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    position: relative;
+    z-index: 2;
   }
 
 }
 
+.gallery-splide__main {
+  width: min(840px, calc(100vw - 48px));
+  aspect-ratio: 1 / 1;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  padding: 20px;
 
+  .splide__track,
+  .splide__list,
+  .splide__slide {
+    height: 100%;
+  }
+
+}
+
+.gallery-splide__main-slide,
+.gallery-splide__thumb-slide {
+  position: relative;
+}
+
+.gallery-splide__main-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gallery-splide__thumbs {
+  width: min(1200px, calc(100vw - 144px));
+}
+
+.gallery-splide__thumb-slide {
+  border: 5px solid rgba(255, 255, 255, 0.25) !important;
+  cursor: pointer;
+
+  &:hover {
+    border: 5px solid rgba(255, 255, 255, 0.5) !important;
+  }
+
+  &.is-active {
+    border: 5px solid rgba(255, 255, 255, 1) !important;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+}
+
+.gallery-splide__thumbs {
+
+  .splide__arrow {
+    width: 44px;
+    height: 44px;
+    opacity: 0.5;
+    background: transparentize($c-white, 0.5);
+    transition: all 0.3s ease;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    svg {
+      fill: $c-white;
+    }
+
+  }
+
+  .splide__arrow--prev {
+    left: -53px;
+  }
+
+  .splide__arrow--next {
+    right: -53px;
+  }
+
+}
+
+@media (max-width: $size-md), (max-height: $size-md) {
+
+  .gallery-screen {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 0;
+
+    .gallery-title {
+      max-width: 650px;
+      z-index: 1;
+    }
+
+    .gallery-splide {
+      flex: none;
+      width: fit-content;
+      height: 100dvh;
+      justify-content: center;
+      padding: 0;
+      z-index: 2;
+    }
+
+  }
+
+  .gallery-splide__main {
+    width: 100%;
+    max-width: 700px;
+    padding: 15px;
+  }
+
+  .gallery-splide__thumbs {
+    display: none;
+  }
+
+}
+
+@media (max-height: $size-sm) {
+
+  .gallery-title {
+    max-width: 350px !important;
+  }
+
+  .gallery-splide__main {
+    height: 100%;
+    width: auto;
+  }
+
+}
 
 
 
@@ -271,7 +367,7 @@ section {
 .scroll-indicator {
   position: fixed;
   left: 50%;
-  bottom: 2dvh;
+  bottom: 5px;
   transform: translateX(-50%);
   width: 80px;
   height: 54px;
@@ -279,12 +375,7 @@ section {
   z-index: 9999;
   opacity: .33;
 
-  @media (max-width: $size-sm) {
-    width: 60px;
-    height: 40px;
-  }
-
-  @media (max-height: $size-sm) {
+  @media (max-width: $size-md), (max-height: $size-md) {
     display: none;
   }
 
