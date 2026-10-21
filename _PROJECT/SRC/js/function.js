@@ -9,6 +9,9 @@
 			type: 'loop',
 			perPage: 1,
 			perMove: 1,
+			dragMinThreshold: { mouse: 0, touch: 8 },
+			flickPower: 500,
+			flickMaxPages: 1,
 			arrows: false,
 			pagination: false,
 			drag: true,
@@ -17,7 +20,7 @@
 			pauseOnHover: true,
 			pauseOnFocus: true,
 			resetProgress: true,
-			speed: 650,
+			speed: 650
 	});
 
 	const thumbs = new Splide('.gallery-splide__thumbs', {
@@ -41,6 +44,9 @@
 	main.sync(thumbs);
 	main.mount();
 	thumbs.mount();
+
+	main.on('drag', () => main.Components.Autoplay.pause());
+	main.on('dragged', () => main.Components.Autoplay.play());
 
 	document.addEventListener('visibilitychange', () => {
 		if (document.hidden) main.Components.Autoplay.pause();

@@ -1,12 +1,12 @@
 gsap.registerPlugin(ScrollTrigger);
 gsap.ticker.lagSmoothing(0);
-ScrollTrigger.normalizeScroll({type:"touch,wheel",allowNestedScroll:true,momentum:0.8});
-ScrollTrigger.config({ignoreMobileResize:true});
+ScrollTrigger.config({ignoreMobileResize:false });
 
 const fps=30;
 const totalFrames=450;
 const video=document.getElementById("q35video");
 const mobileQuery=window.matchMedia("(max-width: 576px), (max-height: 576px)");
+const portraitGalleryTitleQuery=window.matchMedia("(max-width: 768px) and (orientation: portrait)");
 const isMobile=mobileQuery.matches;
 
 video.pause();
@@ -93,22 +93,33 @@ function initGalleryScene(){
 			scrollTrigger:{
 				trigger:".gallery-screen",
 				start:"top top",
-				end:"+=180%",
-				scrub,
+				end:"+=300%",
+				scrub:true,
 				pin:true,
 				invalidateOnRefresh:true
 			}
 		});
 
-		galleryTL.to(".gallery-title",{x:0,xPercent:-50,opacity:1,duration:0.45,ease:"power2.out"});
-		galleryTL.to(".gallery-title",{top:titleTop,yPercent:40,duration:0.35,ease:"power2.inOut"});
-		galleryTL.to(".gallery-splide",{y:0,opacity:1,duration:0.55,ease:"power3.out"});
+		galleryTL.to(".gallery-title",{x:0,xPercent:-50,opacity:1,duration:0.4,ease:"power2.out"});
+		galleryTL.to(".gallery-title",{
+			top:titleTop,
+			yPercent:()=>portraitGalleryTitleQuery.matches ? 0 : 40,
+			duration:0.5,
+			ease:"power2.inOut"
+		});
+		galleryTL.to(".gallery-splide",{y:0,opacity:1,duration:0.5,ease:"power3.out"});
 
 		return () => galleryTL.kill();
 	};
 
 	ScrollTrigger.matchMedia({
-		"(max-width: 576px), (max-height: 576px)":()=>createGalleryTimeline("40px",true),
-		"(min-width: 577px) and (min-height: 577px)":()=>createGalleryTimeline("100px",0.7)
+		"(max-width: 576px), (max-height: 576px)":()=>createGalleryTimeline(
+			()=>portraitGalleryTitleQuery.matches ? "0px" : "40px",
+			true
+		),
+		"(min-width: 577px) and (min-height: 577px)":()=>createGalleryTimeline(
+			()=>portraitGalleryTitleQuery.matches ? "0px" : "100px",
+			1
+		)
 	});
 }
