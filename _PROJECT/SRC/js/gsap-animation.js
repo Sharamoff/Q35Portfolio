@@ -17,6 +17,8 @@ video.playsInline=true;
 
 gsap.set(".stage",{opacity:0});
 gsap.set(".text-block",{opacity:0,y:200});
+gsap.set(".scenes-title",{top:"50%",x:0,xPercent:-100,yPercent:-50,opacity:0});
+gsap.set(".scenes-slides",{y:160,opacity:0});
 gsap.set(".gallery-title",{top:"50%",x:0,xPercent:100,yPercent:-50,opacity:0});
 gsap.set(".gallery-splide",{y:160,opacity:0});
 
@@ -81,8 +83,52 @@ function initStageScene(){
 	});
 	stageTL.to({}, {duration:0.2});
 	stageTL.to(".stage",{opacity:0,duration:0.4}, "<");
+	initScenesScene()
+}
+
+
+function initScenesScene(){
+	const createScenesTimeline=(titleTop,scrub)=>{
+		gsap.set(".scenes-title",{top:"50%",x:0,xPercent:-100,yPercent:0,opacity:0});
+		gsap.set(".scenes-slides",{y:160,opacity:0});
+
+		const scenesTL=gsap.timeline({
+			scrollTrigger:{
+				trigger:".scenes-screen",
+				start:"top top",
+				end:"+=300%",
+				scrub,
+				pin:true,
+				invalidateOnRefresh:true
+			}
+		});
+
+		scenesTL.to(".scenes-title",{x:0,xPercent:-50,opacity:1,duration:0.4,ease:"power2.out"});
+		scenesTL.to(".scenes-title",{
+			top:titleTop,
+			yPercent:()=>portraitGalleryTitleQuery.matches ? 0 : 40,
+			duration:0.5,
+			ease:"power2.inOut"
+		});
+		scenesTL.to(".scenes-slides",{y:0,opacity:1,duration:0.5,ease:"power3.out"});
+		return () => scenesTL.kill();
+	};
+
+	ScrollTrigger.matchMedia({
+		"(max-width: 576px), (max-height: 576px)":()=>createScenesTimeline(
+			()=>portraitGalleryTitleQuery.matches ? "0px" : "40px",
+			true
+		),
+		"(min-width: 577px) and (min-height: 577px)":()=>createScenesTimeline(
+			()=>portraitGalleryTitleQuery.matches ? "0px" : "100px",
+			1
+		)
+	});
+
 	initGalleryScene();
 }
+
+
 
 function initGalleryScene(){
 	const createGalleryTimeline=(titleTop,scrub)=>{
@@ -94,7 +140,7 @@ function initGalleryScene(){
 				trigger:".gallery-screen",
 				start:"top top",
 				end:"+=300%",
-				scrub:true,
+				scrub,
 				pin:true,
 				invalidateOnRefresh:true
 			}
