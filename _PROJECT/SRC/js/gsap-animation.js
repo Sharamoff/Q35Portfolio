@@ -88,29 +88,57 @@ function initStageScene(){
 
 
 function initScenesScene(){
+	const sceneSlides=gsap.utils.toArray(".scenes-slide");
+	const slideHoldDuration=2.4;
+	// Keeps the original scroll pacing of the title and container after adding 27 slides.
+	const sceneIntroTimingScale=27;
 	const createScenesTimeline=(titleTop,scrub)=>{
 		gsap.set(".scenes-title",{top:"50%",x:0,xPercent:-100,yPercent:0,opacity:0});
 		gsap.set(".scenes-slides",{y:160,opacity:0});
+		gsap.set(sceneSlides,{autoAlpha:0});
 
 		const scenesTL=gsap.timeline({
 			scrollTrigger:{
 				trigger:".scenes-screen",
 				start:"top top",
-				end:"+=300%",
+				end:"+=900%",
 				scrub,
 				pin:true,
 				invalidateOnRefresh:true
 			}
 		});
 
-		scenesTL.to(".scenes-title",{x:0,xPercent:-50,opacity:1,duration:0.4,ease:"power2.out"});
+		scenesTL.to(".scenes-title",{
+			x:0,
+			xPercent:-50,
+			opacity:1,
+			duration:0.4*sceneIntroTimingScale,
+			ease:"power2.out"
+		});
 		scenesTL.to(".scenes-title",{
 			top:titleTop,
 			yPercent:()=>portraitGalleryTitleQuery.matches ? 0 : 40,
-			duration:0.5,
+			duration:0.5*sceneIntroTimingScale,
 			ease:"power2.inOut"
 		});
-		scenesTL.to(".scenes-slides",{y:0,opacity:1,duration:0.5,ease:"power3.out"});
+		scenesTL.to(".scenes-slides",{
+			y:0,
+			opacity:1,
+			duration:0.5*sceneIntroTimingScale,
+			ease:"power3.out"
+		});
+		scenesTL.to({}, {duration:1});
+		scenesTL.to(sceneSlides[0],{autoAlpha:1,duration:0.5,ease:"power2.out"});
+		scenesTL.to({}, {duration:slideHoldDuration});
+
+		sceneSlides.slice(1).forEach((slide,index)=>{
+			const previousSlide=sceneSlides[index];
+			scenesTL.to(previousSlide,{autoAlpha:0,duration:0.3,ease:"power1.inOut"});
+			scenesTL.to(slide,{autoAlpha:1,duration:0.3,ease:"power1.inOut"},"<");
+			scenesTL.to({}, {duration:slideHoldDuration});
+		});
+
+		scenesTL.to({}, {duration:1});
 		return () => scenesTL.kill();
 	};
 

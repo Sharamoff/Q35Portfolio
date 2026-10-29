@@ -226,11 +226,11 @@ section {
     z-index: 2;
     inset: 0;
     pointer-events: none;
+    overflow: hidden;
     width: 100%;
     height: auto;
     max-width: 1130px;
-    aspect-ratio: 109/70;
-    padding: 20px;
+    aspect-ratio: 113/74;
     background: rgba(255,255,255,0.15);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
@@ -238,6 +238,10 @@ section {
     @media (max-width: $size-md) {
       padding: 15px;
       max-width: 700px;
+    }
+
+    @media (max-width: $size-sm) {
+      aspect-ratio: 113/76;
     }
 
     @media (max-height: $size-md) {
@@ -250,11 +254,22 @@ section {
       width: auto;
     }
 
-    img {
-      width: 100%;
-      height: 100%;
+    .scenes-slide {
+      position: absolute;
+      inset: 20px;
+      width: calc(100% - 40px);
+      height: calc(100% - 40px);
       display: block;
       object-fit: contain;
+      will-change: opacity;
+    }
+
+    @media (max-width: $size-md), (max-height: $size-md) {
+      .scenes-slide {
+        inset: 15px;
+        width: calc(100% - 30px);
+        height: calc(100% - 30px);
+      }
     }
 
   }
